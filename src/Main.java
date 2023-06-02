@@ -1,17 +1,116 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Intro with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Scanner scanner = new Scanner(System.in);
+        Factura factura = new Factura();
+        List<Producto> productosDisponibles = new ArrayList<>();
 
-        // Press Mayús+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        boolean salir = false;
 
-            // Press Mayús+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+        while (!salir) {
+            System.out.println("          Menú ");
+            System.out.println("_____________________________________");
+            System.out.println("a. Ingresar producto");
+            System.out.println("b. Facturar producto");
+            System.out.println("c. Imprimir factura");
+            System.out.println("d. Salir");
+            System.out.println("_____________________________________");
+            System.out.print("Seleccione una opción: ");
+            String opcion = scanner.nextLine();
+
+            switch (opcion.toLowerCase()) {
+                case "a":
+                    System.out.println("Datos del producto:");
+                    System.out.print(">>Nombre: ");
+                    String nombreProducto = scanner.nextLine();
+                    System.out.print(">>Precio normal: ");
+                    double precioNormal = scanner.nextDouble();
+                    System.out.print(">>Precio al por mayor: ");
+                    double precioMayorista = scanner.nextDouble();
+                    System.out.print(">>Cantidad desde la cual aplica precio mayorista: ");
+                    int cantidadMayorista = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Producto nuevoProducto = new Producto(nombreProducto, precioNormal, precioMayorista, cantidadMayorista);
+                    productosDisponibles.add(nuevoProducto);
+
+                    System.out.print("¿Desea ingresar otro producto? (S/N): ");
+                    String continuarIngresando = scanner.nextLine();
+                    if (continuarIngresando.equalsIgnoreCase("n")) {
+                        System.out.println();
+                    }
+                    break;
+
+                case "b":
+                    if (productosDisponibles.isEmpty()) {
+                        System.out.println("***No hay productos disponibles para facturar***");
+                        System.out.println();
+                        break;
+                    }
+
+                    System.out.println(">>Seleccione el producto que desea:");
+
+                    for (int i = 0; i < productosDisponibles.size(); i++) {
+                        Producto producto = productosDisponibles.get(i);
+                        int numeroProducto = i + 1;
+                        System.out.println(numeroProducto + ". " + producto.getNombre() + " (EL precio normal: $" + producto.getPrecioNormal()
+                                + ") (Precio al por mayor, más de " + producto.getCantidadMayorista() + " de unidades es de: $" + producto.getPrecioMayorista() + ")");
+                    }
+
+                    int seleccionProducto = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (seleccionProducto >= 1 && seleccionProducto <= productosDisponibles.size()) {
+                        Producto productoSeleccionado = productosDisponibles.get(seleccionProducto - 1);
+                        System.out.print(">>Ingrese la cantidad de unidades que desea: ");
+                        int cantidadUnidades = scanner.nextInt();
+                        scanner.nextLine();
+
+                        factura.agregarProducto(productoSeleccionado, cantidadUnidades);
+
+                        System.out.print("¿Desea facturar otro producto?  (S/N): ");
+                        String continuarFacturando = scanner.nextLine();
+                        if (continuarFacturando.equalsIgnoreCase("n")) {
+                            System.out.println();
+                        }
+                    } else {
+                        System.out.println("Selección inválida.");
+                        System.out.println();
+                    }
+                    break;
+                case "c":
+                    if (factura.getProductos().isEmpty()) {
+                        System.out.println("***No existen productos en la factura***");
+                        System.out.println();
+                        break;
+                    }
+
+                    System.out.print(">>Ingrese el nombre del comprador: ");
+                    String nombreComprador = scanner.nextLine();
+                    factura.setNombreComprador(nombreComprador);
+
+                    System.out.print(">>Ingrese el número de cédula del comprador: ");
+                    String cedulaComprador = scanner.nextLine();
+                    factura.setCedulaComprador(cedulaComprador);
+
+                    factura.getDescuento();
+                    factura.imprimirFactura();
+                    System.out.println();
+                    break;
+                case "d":
+                    salir = true;
+                    break;
+
+                default:
+                    System.out.println("***Opción inválida***");
+                    System.out.println();
+                    break;
+            }
         }
+
+        scanner.close();
     }
 }
