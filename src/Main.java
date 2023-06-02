@@ -7,6 +7,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Factura factura = new Factura();
         List<Producto> productosDisponibles = new ArrayList<>();
+        List <Integer> cantidades= new ArrayList<>();
 
         boolean salir = false;
 
@@ -68,7 +69,7 @@ public class Main {
                         System.out.print(">>Ingrese la cantidad de unidades que desea: ");
                         int cantidadUnidades = scanner.nextInt();
                         scanner.nextLine();
-
+                        cantidades.add(cantidadUnidades);
                         factura.agregarProducto(productoSeleccionado, cantidadUnidades);
 
                         System.out.print("¿Desea facturar otro producto?  (S/N): ");
@@ -97,7 +98,7 @@ public class Main {
                     factura.setCedulaComprador(cedulaComprador);
 
                     factura.getDescuento();
-                    factura.imprimirFactura();
+                    factura.imprimirFactura(cantidades);
                     System.out.println();
                     break;
                 case "d":

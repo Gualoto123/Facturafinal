@@ -78,7 +78,7 @@ public class Factura {
 
 
 
-    public void imprimirFactura() {
+    public void imprimirFactura(List<Integer>cantidades) {
         System.out.println("         Factura:");
         System.out.println("------------------------");
         System.out.println("Comprador:" + nombreComprador);
@@ -90,12 +90,17 @@ public class Factura {
             Producto producto = productos.get(i);
             int numeroProducto = i + 1;
 
+
+            System.out.println(" --Nombre del producto: " + producto.getNombre());
             System.out.println(" --Precio unitario: $" + producto.getPrecioNormal());
             System.out.println(" --Precio al por mayor : $" + producto.getPrecioMayorista());
             System.out.println(" --Cantidad aplicada al mayorista: "+ producto.getCantidadMayorista() + " unidades");
+            System.out.println(" --Cantidad de productos: "+ cantidades.get(i)+ " unidades");
+            System.out.println("\n");
+
 
         }
-        System.out.println(" --Cantidad de productos : " +getSubtotal()+ "  productos " );
+
         System.out.println("------------------------");
 
         System.out.println("Subtotal: $" + getSubtotal());
